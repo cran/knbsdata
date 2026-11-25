@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Source status and limitations</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Source status and limitations</h1>
+
+
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(knbsdata)</span></code></pre></div>
+<p>This page states plainly what this release can and cannot do, and
+why. It is worth reading before relying on the package for anything that
+matters.</p>
+<div id="registered-sources" class="section level2">
+<h2>Registered sources</h2>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">knbs_sources</span>()</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="co">#&gt; # A tibble: 9 × 8</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co">#&gt;   source_id         source_name  source_type operations stability authentication</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;             &lt;chr&gt;        &lt;chr&gt;       &lt;list&gt;     &lt;chr&gt;     &lt;chr&gt;         </span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="co">#&gt; 1 kenada            Kenya Natio… survey_cat… &lt;chr [4]&gt;  experime… none          </span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="co">#&gt; 2 finaccess         FinAccess H… static_fil… &lt;chr [1]&gt;  experime… none          </span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="co">#&gt; 3 knbs_publications KNBS Public… publicatio… &lt;chr [3]&gt;  experime… none          </span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="co">#&gt; 4 knbs_indicators   KNBS Census… indicator_… &lt;chr [4]&gt;  experime… none          </span></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="co">#&gt; 5 knbs_cpi          KNBS CPI Ex… indicator_… &lt;chr [4]&gt;  experime… none          </span></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="co">#&gt; 6 knbs_opendata     KNBS Data P… indicator_… &lt;chr [3]&gt;  experime… none          </span></span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a><span class="co">#&gt; 7 opendataforafrica Kenya Open … indicator_… &lt;chr [3]&gt;  experime… none          </span></span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a><span class="co">#&gt; 8 dhs_program       The DHS Pro… indicator_… &lt;chr [3]&gt;  experime… none          </span></span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a><span class="co">#&gt; 9 fake_source       Offline tes… fake        &lt;chr [6]&gt;  discovery none          </span></span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a><span class="co">#&gt; # ℹ 2 more variables: last_verified &lt;date&gt;, base_url &lt;chr&gt;</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">knbs_status</span>()</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co">#&gt; # A tibble: 9 × 7</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co">#&gt;   source_id    operation status http_status response_time_ms checked_at         </span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;        &lt;chr&gt;     &lt;chr&gt;        &lt;int&gt;            &lt;dbl&gt; &lt;dttm&gt;             </span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#&gt; 1 kenada       search_s… not_c…          NA               NA 2026-11-04 10:21:56</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="co">#&gt; 2 finaccess    download… not_c…          NA               NA 2026-11-04 10:21:56</span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co">#&gt; 3 knbs_public… search_p… not_c…          NA               NA 2026-11-04 10:21:56</span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="co">#&gt; 4 knbs_indica… list_ind… not_c…          NA               NA 2026-11-04 10:21:57</span></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="co">#&gt; 5 knbs_cpi     list_ind… not_c…          NA               NA 2026-11-04 10:21:57</span></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="co">#&gt; 6 knbs_openda… list_ind… not_c…          NA               NA 2026-11-04 10:21:57</span></span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="co">#&gt; 7 opendatafor… list_ind… not_c…          NA               NA 2026-11-04 10:21:57</span></span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a><span class="co">#&gt; 8 dhs_program  list_ind… not_c…          NA               NA 2026-11-04 10:21:57</span></span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a><span class="co">#&gt; 9 fake_source  search_s… unver…          NA               NA 2026-11-04 10:21:57</span></span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a><span class="co">#&gt; # ℹ 1 more variable: message &lt;chr&gt;</span></span></code></pre></div>
+<p><code>knbs_status(live = TRUE)</code> contacts the verified sources.
+It never contacts a source at stability <code>discovery</code>, because
+those have placeholder endpoints and there is nothing to call.</p>
+</div>
+<div id="what-each-stability-level-means" class="section level2">
+<h2>What each stability level means</h2>
+<table>
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Level</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>discovery</code></td>
+<td>The endpoint has not been verified. Unusable, and never
+contacted.</td>
+</tr>
+<tr class="even">
+<td><code>experimental</code></td>
+<td>Verified and tested, but not documented by its publisher, so it
+could change without notice.</td>
+</tr>
+<tr class="odd">
+<td><code>beta</code></td>
+<td>Verified, documented and monitored over time.</td>
+</tr>
+<tr class="even">
+<td><code>stable</code></td>
+<td>A schema contract the package expects to keep.</td>
+</tr>
+<tr class="odd">
+<td><code>deprecated</code></td>
+<td>Scheduled for removal.</td>
+</tr>
+</tbody>
+</table>
+<p>Nothing in this release is above <code>experimental</code>.</p>
+</div>
+<div id="what-works" class="section level2">
+<h2>What works</h2>
+<p><strong>The survey catalogue</strong>, via the Kenya National Data
+Archive: <code>knbs_search_surveys()</code>,
+<code>knbs_survey_metadata()</code>, <code>knbs_variables()</code> and
+<code>knbs_survey_files()</code>. The archive exposes a JSON API that
+needs no credentials for metadata. 129 studies covering 1969–2022 were
+catalogued at the time of the audit.</p>
+<p><strong>Open survey microdata</strong>, via the FinAccess portal
+(<code>finaccess.knbs.or.ke</code>):
+<code>knbs_finaccess_files()</code>,
+<code>knbs_download_finaccess()</code> and
+<code>knbs_read_microdata()</code>. The Central Bank of Kenya, KNBS and
+FSD Kenya publish the anonymised, weighted microdata of the FinAccess
+household surveys — 2006, 2009, 2013, 2016, 2021 and 2024 — and of two
+MSE Tracker Survey waves for anyone to download, with questionnaires,
+manuals and reports. The portal is a web page linking Google Drive
+files, so the package keeps its own catalogue of them, and holds every
+download to it: served name and size before the transfer, size and
+SHA-256 after. Three properties to keep in mind:</p>
+<ul>
+<li><strong>The portal states no licence.</strong> FSD Kenya’s terms for
+the 2013 survey restrict the data to research and forbid redistribution
+without written agreement; assume nothing wider. The terms travel in
+each file’s sidecar and metadata, and no file is bundled with the
+package.</li>
+<li><strong>Some portal labels are wrong</strong>, and the catalogue
+records what each link actually serves: the MSE Tracker Wave II formats
+are swapped, and the 2006 and 2009 “Questionnaire” archives hold the
+survey data too.</li>
+<li><strong>The 2013 survey’s Stata copy sits behind a registration
+form</strong> on Harvard Dataverse. It is listed, never fetched; its
+SPSS copy is open.</li>
+</ul>
+<p><strong>Publications</strong>, via the KNBS website’s media library:
+<code>knbs_publications()</code> and
+<code>knbs_download_publication()</code>. The site’s WordPress REST API
+lists roughly 1,600 documents — statistical releases, survey reports,
+Economic Survey chapters and workbooks — with direct, ungated file URLs.
+Downloads are verified, checksummed and given a provenance sidecar.</p>
+<p>Two properties of this source to keep in mind:</p>
+<ul>
+<li><code>release_date</code> is the date a file reached the website,
+not the publication’s reference period. The <code>year</code> column is
+read from the title, and is <code>NA</code> when the title names
+none.</li>
+<li>The media library also holds speeches, launch remarks and forms.
+What counts as a publication is your <code>query</code>, not a curated
+list.</li>
+</ul>
+<p><strong>Census tables</strong>, via the KNBS census data service
+(<code>data.knbs.or.ke</code>): <code>knbs_indicators()</code> and
+<code>knbs_get_indicator()</code>. Thirty-two tables from the 2019
+Population and Housing Census as JSON-stat, under an explicit CC BY 4.0
+statement, with geography down to sub-county and leading zeros intact.
+See <code>vignette(&quot;census-indicators&quot;)</code>.</p>
+<p>One property of this source to keep in mind: <strong>its API host is
+HTTP-only</strong> — no TLS listener exists — so traffic to it is
+unencrypted in transit. It carries public census aggregates and no
+credentials, and the registry records the exception explicitly rather
+than hiding it.</p>
+<p><strong>The economy</strong>, via the KNBS Data Portal
+(<code>opendata.knbs.or.ke</code>): 323 SDMX dataflows across five
+statistical domains — GDP by activity and expenditure, GFCF, GNI,
+production accounts, CPI by division and region, balance of payments,
+trade, money and banking, county government finance, employment,
+agriculture, tourism, health and justice. <code>knbs_indicators()</code>
+lists them (<code>source_id</code> <code>&quot;knbs_opendata&quot;</code>) and
+<code>knbs_get_indicator()</code> fetches one by its SDMX id, for
+example <code>&quot;DF_NAT_GDPCP&quot;</code>. Three properties to keep in mind:
+the portal states <strong>no licence</strong>; its geography codes are
+<strong>SDMX area codes, not census territories</strong> (never join
+them against <code>knbs_geographies()</code>); and single-category
+dimensions fold into <code>knbs_metadata()</code> notes rather than
+arriving as constant columns.</p>
+<p><strong>Consumer prices</strong>, via the KNBS CPI Explorer
+(<code>cpiexplorer.knbs.or.ke</code>):
+<code>knbs_get_indicator(&quot;CPI_ALL_ITEMS&quot;)</code>,
+<code>&quot;CPI_INFLATION_YOY&quot;</code> and <code>&quot;CPI_INFLATION_MOM&quot;</code> —
+monthly from January 2009, nationally and by the CPI collection strata
+(the Nairobi income bands, Nairobi Combined, Rest of Urban) — plus
+<code>knbs_retail_prices()</code>, the monthly national average retail
+prices of the 22 CPI basket commodities. See
+<code>vignette(&quot;census-indicators&quot;)</code>.</p>
+<p>Three properties of this source to keep in mind, all carried in
+<code>knbs_metadata()</code> on every result:</p>
+<ul>
+<li><strong>The portal states no licence</strong>, unlike the census
+service’s CC BY 4.0 footer, and does not state the index base
+period.</li>
+<li><strong>Its regions are collection strata, not census
+territories.</strong> Their codes must never be joined against
+<code>knbs_geographies()</code>.</li>
+<li><strong>Six listed regions — the former provinces — carry no data in
+any period.</strong> Asking for them returns zero rows, because that is
+the source’s answer.</li>
+</ul>
+<p><strong>Gross County Product and the republished datasets</strong>,
+via Kenya Open Data for Africa
+(<code>kenya.opendataforafrica.org</code>): 202 datasets — 169 sourced
+from KNBS, the rest from the Central Bank of Kenya, ministries and
+agencies — including the one thing no first-party portal serves as data:
+Gross County Product (<code>knbs_get_indicator(&quot;jhbzkjc&quot;)</code> — GVA
+shares plus constant- and current-price GCP for all 47 counties,
+2013–2020). <code>knbs_indicators()</code> lists them
+(<code>source_id</code> <code>&quot;opendataforafrica&quot;</code>).</p>
+<p>This source is different in kind from the others, and its honesty
+caveats are correspondingly heavier:</p>
+<ul>
+<li><strong>It is a republisher, not the publisher.</strong> The portal
+is operated on the Knoema data platform and is listed on KNBS’s own
+portals page; every result’s <code>knbs_metadata()</code> names the
+portal and points at the original producer. Where a first-party portal
+serves the same data, prefer the first-party portal.</li>
+<li><strong>Its vintage can lag the PDFs.</strong> The GCP dataset is
+the 2021 edition; KNBS has since published newer GCP years as PDF
+reports only. The metadata carries the portal’s own publication and
+update dates so the lag is visible, not hidden.</li>
+<li><strong>Licence labels vary by dataset</strong> and are carried
+verbatim — most KNBS-sourced datasets say “Public Domain”; datasets
+without a label say “Not stated by the source”.</li>
+<li><strong>Its geography codes are the portal’s own region
+codes</strong> (<code>KE</code>, <code>KE-700-BA</code>, …), not census
+territories; never join them against
+<code>knbs_geographies()</code>.</li>
+<li><strong>A dataset may mix frequencies</strong> — annual, quarterly
+and monthly series side by side under one id. Annual periods are integer
+years and sub-annual ones are Dates, which cannot share a column, so a
+mixed dataset asks you to choose (<code>frequency = &quot;annual&quot;</code>)
+rather than picking one silently.</li>
+<li><strong>Its edge sometimes challenges automated clients.</strong>
+The package identifies itself transparently and speaks plain HTTP/1.1,
+which the portal serves; if a challenge page comes back anyway, that is
+an access gate and you get <code>knbs_error_access_restricted</code> —
+the package never solves or retries a challenge. Trying again later
+usually suffices.</li>
+</ul>
+<p><strong>Health and demography</strong>, via the DHS Program’s
+Indicator Data API (<code>api.dhsprogram.com</code>): the indicators of
+the Kenya Demographic and Health Surveys (1989–2022), which KNBS
+implements, and of the 2015 and 2020 Malaria Indicator Surveys — 4,115
+of them, listed by <code>knbs_indicators()</code> with
+<code>source_id</code> <code>&quot;dhs_program&quot;</code> and fetched by id, for
+example <code>knbs_get_indicator(&quot;CN_NUTS_C_HA2&quot;)</code> (children
+stunted). Each comes for every survey that measured it, by background
+characteristic, by the former provinces, and from 2014 by county. KNBS’s
+own KDHS portal is a dashboard with no data API, and answered with an
+error when checked. Properties to keep in mind:</p>
+<ul>
+<li><strong>County rows carry census codes</strong>; province and
+malaria-zone rows carry none, since no census code exists for them.</li>
+<li><strong>Several values can describe one group.</strong> Where the
+DHS Program reports more than one reference period, every value is kept
+and <code>preferred</code> marks the one it prefers.</li>
+<li><strong>A few ids are reused.</strong> The API lists 27 indicator
+ids twice; where one serves two different values for the same survey and
+group, the package refuses it with
+<code>knbs_error_validation_failed</code> rather than choose.</li>
+<li><strong>The terms ask for a citation</strong>, which
+<code>knbs_cite()</code> gives in the form the API specifies. No licence
+is stated.</li>
+<li><strong>Its robots file bars <code>/rest/dhs/</code></strong>, the
+API itself, to every client, while its documentation invites
+applications to use it. The package reads the rule as addressed to
+crawlers: it asks only for what you request, one indicator at a time,
+under its own name, throttled and cached, and never walks the API.</li>
+</ul>
+<p><strong>Statistical Abstract tables</strong>, via the KNBS website’s
+chapter workbooks: <code>knbs_abstract_tables()</code> and
+<code>knbs_abstract_table()</code>. 48 tables of the 2025 edition,
+across 13 chapters — the whole National Accounts chapter and 33 tables
+from twelve more — extract into tidy observations by hand-verified
+recipes. Extraction is deliberately strict: layout anchors, section
+labels and pinned reference values are re-checked on every read, and a
+workbook that has drifted is refused with a classed error rather than
+re-interpreted. Tables not yet curated remain verified
+<em>downloads</em> (<code>knbs_download_publication()</code>). See
+<code>vignette(&quot;statistical-abstract&quot;)</code>.</p>
+</div>
+<div id="what-does-not-and-why" class="section level2">
+<h2>What does not, and why</h2>
+<div id="the-archives-microdata-cannot-be-downloaded" class="section level3">
+<h3>The archive’s microdata cannot be downloaded</h3>
+<p>The archive requires an account for every download.
+<code>knbs_download_microdata()</code> explains the official access
+process and stops. The package does not automate sign-in, licence
+acceptance or approval workflows. Microdata are downloaded only where
+the producers publish them for anyone, as the FinAccess surveys are.</p>
+<p>This is worth understanding rather than working around:
+<code>access_type</code> of <code>public_use</code> describes the
+archive’s <em>terms</em> — public-use files exist — not whether a
+program may fetch them.</p>
+</div>
+<div id="documentation-files-are-not-listed" class="section level3">
+<h3>Documentation files are not listed</h3>
+<p>Questionnaires, reports and technical documents have no
+machine-readable listing at the archive. Reaching them would mean
+parsing a web page, which this package does not do. The
+<code>catalogue_url</code> column from
+<code>knbs_search_surveys()</code> opens the study on the archive’s own
+site, where they are linked.</p>
+</div>
+<div id="the-newest-gross-county-product-years-are-still-documents" class="section level3">
+<h3>The newest Gross County Product years are still documents</h3>
+<p>GCP is data now — but only the 2021 edition (2013–2020), through the
+Open Data for Africa republisher above; no first-party KNBS portal
+serves it as data (checked exhaustively). The editions published since
+extend the series past 2020 as PDF reports only, reachable through
+<code>knbs_publications(&quot;gross county product&quot;)</code>. If the newest
+county figures matter, read the PDF; the metadata on the data version
+dates its vintage precisely so the gap is never invisible.</p>
+</div>
+<div id="geography-one-vintage-no-boundaries-no-classifications" class="section level3">
+<h3>Geography: one vintage, no boundaries, no classifications</h3>
+<p><code>knbs_geographies()</code> serves the 2019 census frame — Kenya,
+47 counties, sub-counties, with names and parent codes, read from the
+census service’s own Territory dimension. What it does not serve,
+because nothing has been verified: other vintages, crosswalks between
+coding systems, boundary geometries (<code>knbs_boundaries()</code> does
+not exist) and statistical classifications.</p>
+</div>
+<div id="variable-documentation-is-uneven" class="section level3">
+<h3>Variable documentation is uneven</h3>
+<p>Some studies are catalogued with no variable metadata at all,
+including the most recent one at the time of the audit.
+<code>knbs_variables()</code> returns zero rows for those. That is the
+archive’s answer, not a failure.</p>
+</div>
+</div>
+<div id="how-you-will-know-if-something-changes" class="section level2">
+<h2>How you will know if something changes</h2>
+<p>The package checks the <em>shape</em> of every response, not just its
+status code. The archive answers unknown paths with <code>200</code> and
+a study record rather than a 404, so a renamed endpoint would otherwise
+deliver the wrong object convincingly. When a payload lacks the fields
+its operation requires, you get <code>knbs_error_schema_changed</code>
+and a note that the endpoint has probably moved.</p>
+<p>A scheduled job runs <code>knbs_status(live = TRUE)</code> weekly
+against the verified sources.</p>
+</div>
+<div id="reporting-a-change" class="section level2">
+<h2>Reporting a change</h2>
+<p>If a source has moved, changed shape or changed its access rules,
+please open a <a href="https://github.com/Mustapha-Wasseja/knbsdata/issues/new/choose">data
+source change issue</a>. Public URLs only — never session-bound URLs,
+tokens or cookies.</p>
+</div>
+<div id="disclaimer" class="section level2">
+<h2>Disclaimer</h2>
+<p><code>knbsdata</code> is an independent open-source project. It is
+not an official KNBS product unless and until KNBS formally adopts or
+endorses it. Consult the original KNBS source for authoritative
+definitions, revisions, access conditions and official releases.</p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

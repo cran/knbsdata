@@ -1,0 +1,236 @@
+---
+title: "The Statistical Abstract as tidy tables"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{The Statistical Abstract as tidy tables}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
+
+```{r setup}
+library(knbsdata)
+```
+
+The Statistical Abstract is KNBS's annual compendium, and since the 2025
+edition its chapter tables ship as Excel workbooks on the KNBS website —
+eighteen chapters from Land & Water to Social & Economic Inclusion.
+`knbs_publications()` finds those workbooks and
+`knbs_download_publication()` fetches them verified; this vignette is about
+the step beyond: reading a table *inside* a workbook as clean tidy
+observations.
+
+## Curated, not guessed
+
+A published spreadsheet is a print layout, not a dataset: title rows, merged
+headers, section headings, footnote lines, dot leaders, provisional marks.
+A universal spreadsheet-to-tidy converter would have to guess its way
+through all of that, and a wrong guess produces plausible, wrong data — the
+worst outcome this package knows.
+
+So extraction here is **curated**. Each supported table has a hand-verified
+recipe in the package's registry: which sheet, which title anchor, which
+rows are section headings, what the unit is, and several reference values
+read from the workbook by hand at curation time. Every extraction re-checks
+all of it. If KNBS reshuffles a sheet or revises a pinned figure, you get
+`knbs_error_schema_changed` or `knbs_error_validation_failed` with an
+explanation — never silently re-arranged numbers.
+
+Curated so far, 48 tables across 13 chapters:
+
+- **Chapter 2, National Accounts** — all fifteen tables: the production
+  accounts, GDP by activity at current and constant prices, expenditure on
+  GDP, capital formation, national income and saving.
+- **Chapters 3–16** — 33 more: wage employment by sector (3); the Post
+  Office Savings Bank and insurance business (4); principal export
+  commodities (6); crop sales and producer prices (7); forest plantations
+  and wildlife (8); electricity connections and fuel sales (9); producer
+  price indices and production of selected commodities (10); construction
+  output by county and cement (11); visitor arrivals, departures and hotel
+  occupancy (12); railway earnings, vehicle registration and inspection,
+  Mombasa port and aircraft (13); school enrolment, including by county
+  (15); and registered births and deaths by county (16).
+
+Not every table can be curated this way. A survey of all 267 tables in
+the chapter workbooks found 38 in the layout the engine reads — items in
+rows, years across — and five of those were left out: four run across two
+sheets, and one puts Male, Female and Total under each year, which the
+engine now refuses rather than misreading. The registry is the extension
+point for the rest.
+
+## Listing and fetching
+
+```{r}
+knbs_abstract_tables()
+```
+
+```{r, eval = FALSE}
+gdp <- knbs_abstract_table("2.2")     # GDP by activity, current prices
+gdp[gdp$industry == "GDP at market prices", c("period", "status", "value")]
+#> # A tibble: 10 x 3
+#>    period status         value
+#>     <int> <chr>          <dbl>
+#>  1   2015 NA           6884326
+#>  2   2016 NA           7594064
+#>  ...
+#>  9   2023 revised     15033610
+#> 10   2024 provisional 16224478
+```
+
+A table id works, and so does enough of a title:
+
+```{r, eval = FALSE}
+saving <- knbs_abstract_table("disposable income")   # resolves to 2.9
+```
+
+## Reading the columns
+
+- `period` is the integer year, and `status` carries the source's own year
+  flags: `"provisional"` (printed `*`), `"revised"` (printed `+`), `NA` for
+  final years.
+- The row dimension keeps its meaning as a named column: `industry` for the
+  GDP tables, `expenditure_category`, `purpose` for capital formation.
+- Sectioned tables carry their section as a second named column. In the
+  production accounts (`"2.1"`), `industry` is the section and `measure`
+  the row — output, intermediate consumption, value added, compensation.
+- A row the source prints without figures — "Less: Subsidies" in the
+  production accounts — is kept with `NA` values, because that is what the
+  source shows.
+- The tables print totals beside their parts: "GDP at market prices", then
+  "All industries", then each industry, then sub-industries such as
+  "Growing of crops". `parent` names the row each item is a component of —
+  industries have `"All industries"`, sub-industries their industry,
+  headline totals and memo items `NA` — so summing within one parent never
+  double counts, while summing a whole year does. The parts are checked to
+  add up to their parent, within rounding, on every read. Imports enter GDP
+  with a negative sign, and `knbs_metadata()` says so. The accounts tables
+  (2.1, 2.8, 2.9) are linked by accounting identities instead and have no
+  `parent`.
+- Units are stated in `knbs_metadata()`, not repeated on every row; a
+  mixed-unit table (2.8 carries KSh million aggregates *and* per-capita
+  KSh) says so there.
+
+## County tables join everything else
+
+The county tables carry `geo_code`, the census frame code of each row, so
+they join the census, `knbs_geographies()` and anything passed through
+`knbs_county_code()`. The total row is `"00"`. Registered births per 1,000
+people by county, from the Abstract's Table 16.11 and the 2019 census:
+
+```{r, eval = FALSE}
+library(dplyr)
+
+births <- knbs_abstract_table("16.11") |>          # by county of occurrence
+  filter(period == 2019L, geo_code != "00")
+pop <- knbs_get_indicator("POPCEN0002", geo_level = "county") |>
+  filter(sex == "total", age_type == "total")
+
+births |>
+  inner_join(pop, by = "geo_code", suffix = c("_births", "_pop")) |>
+  mutate(births_per_1000 = 1000 * value_births / value_pop) |>
+  arrange(desc(births_per_1000))
+#> Kericho 37.0, Busia 34.4, Nairobi City 33.4, ... Mandera 14.3, Wajir 8.2
+```
+
+All 47 counties join. Read the result as registration, not fertility: the
+table counts births *registered*, by the county where they *occurred*, so
+it reflects civil-registration coverage and where hospitals are as much
+as birth rates.
+
+A county table is refused, rather than served, if its rows stop accounting
+for the 47 counties exactly once — a county lost, doubled, or renamed past
+recognition.
+
+## Units, footnotes and sources
+
+Where a sheet prints a unit per row — Table 10.7's sugar in tonnes, soft
+drinks in thousands of litres — it comes through as a `unit` column.
+Footnote marks printed against labels ("Coffee1,2") are removed from the
+label, and what the footnote said is kept in `knbs_metadata()`'s notes,
+along with the source the sheet credits:
+
+```{r, eval = FALSE}
+knbs_metadata(knbs_abstract_table("7.6"))$notes
+#> ... "Coffee and tea are auction prices; coffee refers to coffee beans
+#>      and tea to black tea." "Rice paddy prices for 2020 and 2021 are
+#>      revised." "Source as printed: Marketing Boards, Millers and
+#>      Ginneries." ...
+```
+
+## Into the tidyverse
+
+Every result is a tibble, so dplyr verbs work directly — and they keep the
+provenance: filter it, rank it, transform it, and `knbs_metadata()` still
+answers on the result. Aggregations and reshapes return plain tibbles,
+because a derived table is your data, not the source's.
+
+```{r, eval = FALSE}
+library(dplyr)
+library(tidyr)
+
+# The largest industries in 2024. Keeping one level of the table - the
+# parts of "All industries" - leaves out the totals and the sub-industries
+# that would otherwise crowd the ranking.
+knbs_abstract_table("2.2") |>
+  filter(period == 2024, parent == "All industries") |>
+  slice_max(value, n = 5) |>
+  select(industry, value, status)
+
+# The breakdown of one industry
+knbs_abstract_table("2.2") |>
+  filter(period == 2024, parent == "Agriculture, forestry and fishing")
+
+# Recreate the printed-table look: industries by year, wide
+knbs_abstract_table("2.4") |>
+  filter(industry %in% c("Agriculture, forestry and fishing",
+                         "Manufacturing", "GDP at market prices")) |>
+  select(industry, period, value) |>
+  pivot_wider(names_from = period, values_from = value)
+
+# Sectioned tables group naturally
+knbs_abstract_table("2.1") |>
+  filter(measure == "Gross value added at basic prices", period == 2024) |>
+  arrange(desc(value))
+
+# And straight into ggplot2
+library(ggplot2)
+knbs_abstract_table("2.5") |>
+  filter(industry == "GDP at market prices") |>
+  ggplot(aes(period, value)) +
+  geom_col() +
+  labs(title = "Real GDP growth", y = "per cent")
+```
+
+To hand the data to something that dislikes subclasses, drop the wrapper
+with `tibble::as_tibble()`.
+
+## Provenance travels
+
+```{r, eval = FALSE}
+meta <- knbs_metadata(gdp)
+meta$source_url   # the workbook on knbs.or.ke
+meta$notes        # edition, sheet, workbook SHA-256, flag legend
+knbs_cite(gdp)
+```
+
+The workbook itself is downloaded once through the package's verify layer —
+an HTML page arriving where a spreadsheet was expected is refused — cached
+locally, and hashed; the SHA-256 in the notes says exactly which file the
+numbers came from.
+
+## What this is not
+
+- **Not a universal parser.** Only curated tables extract; everything else
+  in the workbooks remains available as verified downloads through
+  `knbs_download_publication()`.
+- **Not a modelling of the tables' arithmetic.** Aggregate rows ("GDP at
+  market prices", "Total") are rows like any other, as printed; nothing is
+  summed, derived or reconciled for you. `parent` records how the printed
+  rows nest, and the check that parts add up guards the extraction — it
+  never adjusts a figure.
+- **Not immune to source revisions — by design.** A changed workbook stops
+  extraction until the registry is re-verified against it. That is the
+  honest failure mode.

@@ -1,0 +1,21 @@
+citHeader(
+  "To cite knbsdata in publications, cite the software. Cite the data you used",
+  "separately with knbs_cite(), which reproduces the archive's own required",
+  "citation where it states one."
+)
+
+bibentry(
+  bibtype  = "Manual",
+  title    = "{knbsdata}: Discover, Retrieve and Cite Official Kenyan Statistics",
+  author   = c(person(c("Mustapha", "Wasseja"), "Mohammed"),
+               person(c("Pascal", "Ochieng"), "Owiti")),
+  year     = "2026",
+  note     = sprintf("R package version %s", meta$Version),
+  url      = "https://github.com/Mustapha-Wasseja/knbsdata",
+  textVersion = paste0(
+    "Mohammed, M. W. and Owiti, P. O. (2026). ",
+    "knbsdata: Discover, Retrieve and Cite Official Kenyan Statistics. ",
+    "R package version ", meta$Version, ". ",
+    "https://github.com/Mustapha-Wasseja/knbsdata"
+  )
+)

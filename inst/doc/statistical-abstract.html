@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>The Statistical Abstract as tidy tables</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">The Statistical Abstract as tidy
+tables</h1>
+
+
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(knbsdata)</span></code></pre></div>
+<p>The Statistical Abstract is KNBS’s annual compendium, and since the
+2025 edition its chapter tables ship as Excel workbooks on the KNBS
+website — eighteen chapters from Land &amp; Water to Social &amp;
+Economic Inclusion. <code>knbs_publications()</code> finds those
+workbooks and <code>knbs_download_publication()</code> fetches them
+verified; this vignette is about the step beyond: reading a table
+<em>inside</em> a workbook as clean tidy observations.</p>
+<div id="curated-not-guessed" class="section level2">
+<h2>Curated, not guessed</h2>
+<p>A published spreadsheet is a print layout, not a dataset: title rows,
+merged headers, section headings, footnote lines, dot leaders,
+provisional marks. A universal spreadsheet-to-tidy converter would have
+to guess its way through all of that, and a wrong guess produces
+plausible, wrong data — the worst outcome this package knows.</p>
+<p>So extraction here is <strong>curated</strong>. Each supported table
+has a hand-verified recipe in the package’s registry: which sheet, which
+title anchor, which rows are section headings, what the unit is, and
+several reference values read from the workbook by hand at curation
+time. Every extraction re-checks all of it. If KNBS reshuffles a sheet
+or revises a pinned figure, you get
+<code>knbs_error_schema_changed</code> or
+<code>knbs_error_validation_failed</code> with an explanation — never
+silently re-arranged numbers.</p>
+<p>Curated so far, 48 tables across 13 chapters:</p>
+<ul>
+<li><strong>Chapter 2, National Accounts</strong> — all fifteen tables:
+the production accounts, GDP by activity at current and constant prices,
+expenditure on GDP, capital formation, national income and saving.</li>
+<li><strong>Chapters 3–16</strong> — 33 more: wage employment by sector
+(3); the Post Office Savings Bank and insurance business (4); principal
+export commodities (6); crop sales and producer prices (7); forest
+plantations and wildlife (8); electricity connections and fuel sales
+(9); producer price indices and production of selected commodities (10);
+construction output by county and cement (11); visitor arrivals,
+departures and hotel occupancy (12); railway earnings, vehicle
+registration and inspection, Mombasa port and aircraft (13); school
+enrolment, including by county (15); and registered births and deaths by
+county (16).</li>
+</ul>
+<p>Not every table can be curated this way. A survey of all 267 tables
+in the chapter workbooks found 38 in the layout the engine reads — items
+in rows, years across — and five of those were left out: four run across
+two sheets, and one puts Male, Female and Total under each year, which
+the engine now refuses rather than misreading. The registry is the
+extension point for the rest.</p>
+</div>
+<div id="listing-and-fetching" class="section level2">
+<h2>Listing and fetching</h2>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">knbs_abstract_tables</span>()</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="co">#&gt; &lt;knbs_catalogue&gt;</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co">#&gt; Title: 2025 Statistical Abstract: curated tables</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co">#&gt; Rows: 48</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="co">#&gt; Source: Kenya National Bureau of Statistics</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="co">#&gt; # A tibble: 48 × 6</span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="co">#&gt;    table_id title                                   chapter unit  sheet workbook</span></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="co">#&gt;    &lt;chr&gt;    &lt;chr&gt;                                   &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;   </span></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="co">#&gt;  1 2.1      Annual Production Accounts by Industry… Chapte… KSh … Tabl… NA-Stat…</span></span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a><span class="co">#&gt;  2 2.2      Gross Domestic Product by Activity, 20… Chapte… KSh … Tabl… NA-Stat…</span></span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a><span class="co">#&gt;  3 2.3      Contribution to Gross Domestic Product… Chapte… per … Tabl… NA-Stat…</span></span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a><span class="co">#&gt;  4 2.4      Gross Domestic Product by Activity, 20… Chapte… KSh … Tabl… NA-Stat…</span></span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a><span class="co">#&gt;  5 2.5      Growth of Gross Domestic Product by Ac… Chapte… per … Tabl… NA-Stat…</span></span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a><span class="co">#&gt;  6 2.6a     Expenditure on the Gross Domestic Prod… Chapte… KSh … Tabl… NA-Stat…</span></span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a><span class="co">#&gt;  7 2.6b     Expenditure on the Gross Domestic Prod… Chapte… per … Tabl… NA-Stat…</span></span>
+<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a><span class="co">#&gt;  8 2.6c     Expenditure on the Gross Domestic Prod… Chapte… KSh … Tabl… NA-Stat…</span></span>
+<span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a><span class="co">#&gt;  9 2.6d     Growth in Expenditure on the Gross Dom… Chapte… per … Tabl… NA-Stat…</span></span>
+<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a><span class="co">#&gt; 10 2.7a     Gross Fixed Capital Formation, 2015 - … Chapte… KSh … Tabl… NA-Stat…</span></span>
+<span id="cb2-20"><a href="#cb2-20" tabindex="-1"></a><span class="co">#&gt; # ℹ 38 more rows</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>gdp <span class="ot">&lt;-</span> <span class="fu">knbs_abstract_table</span>(<span class="st">&quot;2.2&quot;</span>)     <span class="co"># GDP by activity, current prices</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>gdp[gdp<span class="sc">$</span>industry <span class="sc">==</span> <span class="st">&quot;GDP at market prices&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;period&quot;</span>, <span class="st">&quot;status&quot;</span>, <span class="st">&quot;value&quot;</span>)]</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co">#&gt; # A tibble: 10 x 3</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co">#&gt;    period status         value</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#&gt;     &lt;int&gt; &lt;chr&gt;          &lt;dbl&gt;</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="co">#&gt;  1   2015 NA           6884326</span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co">#&gt;  2   2016 NA           7594064</span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="co">#&gt;  ...</span></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="co">#&gt;  9   2023 revised     15033610</span></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="co">#&gt; 10   2024 provisional 16224478</span></span></code></pre></div>
+<p>A table id works, and so does enough of a title:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>saving <span class="ot">&lt;-</span> <span class="fu">knbs_abstract_table</span>(<span class="st">&quot;disposable income&quot;</span>)   <span class="co"># resolves to 2.9</span></span></code></pre></div>
+</div>
+<div id="reading-the-columns" class="section level2">
+<h2>Reading the columns</h2>
+<ul>
+<li><code>period</code> is the integer year, and <code>status</code>
+carries the source’s own year flags: <code>&quot;provisional&quot;</code> (printed
+<code>*</code>), <code>&quot;revised&quot;</code> (printed <code>+</code>),
+<code>NA</code> for final years.</li>
+<li>The row dimension keeps its meaning as a named column:
+<code>industry</code> for the GDP tables,
+<code>expenditure_category</code>, <code>purpose</code> for capital
+formation.</li>
+<li>Sectioned tables carry their section as a second named column. In
+the production accounts (<code>&quot;2.1&quot;</code>), <code>industry</code> is
+the section and <code>measure</code> the row — output, intermediate
+consumption, value added, compensation.</li>
+<li>A row the source prints without figures — “Less: Subsidies” in the
+production accounts — is kept with <code>NA</code> values, because that
+is what the source shows.</li>
+<li>The tables print totals beside their parts: “GDP at market prices”,
+then “All industries”, then each industry, then sub-industries such as
+“Growing of crops”. <code>parent</code> names the row each item is a
+component of — industries have <code>&quot;All industries&quot;</code>,
+sub-industries their industry, headline totals and memo items
+<code>NA</code> — so summing within one parent never double counts,
+while summing a whole year does. The parts are checked to add up to
+their parent, within rounding, on every read. Imports enter GDP with a
+negative sign, and <code>knbs_metadata()</code> says so. The accounts
+tables (2.1, 2.8, 2.9) are linked by accounting identities instead and
+have no <code>parent</code>.</li>
+<li>Units are stated in <code>knbs_metadata()</code>, not repeated on
+every row; a mixed-unit table (2.8 carries KSh million aggregates
+<em>and</em> per-capita KSh) says so there.</li>
+</ul>
+</div>
+<div id="county-tables-join-everything-else" class="section level2">
+<h2>County tables join everything else</h2>
+<p>The county tables carry <code>geo_code</code>, the census frame code
+of each row, so they join the census, <code>knbs_geographies()</code>
+and anything passed through <code>knbs_county_code()</code>. The total
+row is <code>&quot;00&quot;</code>. Registered births per 1,000 people by county,
+from the Abstract’s Table 16.11 and the 2019 census:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>births <span class="ot">&lt;-</span> <span class="fu">knbs_abstract_table</span>(<span class="st">&quot;16.11&quot;</span>) <span class="sc">|&gt;</span>          <span class="co"># by county of occurrence</span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>  <span class="fu">filter</span>(period <span class="sc">==</span> <span class="dv">2019</span><span class="dt">L</span>, geo_code <span class="sc">!=</span> <span class="st">&quot;00&quot;</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>pop <span class="ot">&lt;-</span> <span class="fu">knbs_get_indicator</span>(<span class="st">&quot;POPCEN0002&quot;</span>, <span class="at">geo_level =</span> <span class="st">&quot;county&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>  <span class="fu">filter</span>(sex <span class="sc">==</span> <span class="st">&quot;total&quot;</span>, age_type <span class="sc">==</span> <span class="st">&quot;total&quot;</span>)</span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>births <span class="sc">|&gt;</span></span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>  <span class="fu">inner_join</span>(pop, <span class="at">by =</span> <span class="st">&quot;geo_code&quot;</span>, <span class="at">suffix =</span> <span class="fu">c</span>(<span class="st">&quot;_births&quot;</span>, <span class="st">&quot;_pop&quot;</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">births_per_1000 =</span> <span class="dv">1000</span> <span class="sc">*</span> value_births <span class="sc">/</span> value_pop) <span class="sc">|&gt;</span></span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(births_per_1000))</span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a><span class="co">#&gt; Kericho 37.0, Busia 34.4, Nairobi City 33.4, ... Mandera 14.3, Wajir 8.2</span></span></code></pre></div>
+<p>All 47 counties join. Read the result as registration, not fertility:
+the table counts births <em>registered</em>, by the county where they
+<em>occurred</em>, so it reflects civil-registration coverage and where
+hospitals are as much as birth rates.</p>
+<p>A county table is refused, rather than served, if its rows stop
+accounting for the 47 counties exactly once — a county lost, doubled, or
+renamed past recognition.</p>
+</div>
+<div id="units-footnotes-and-sources" class="section level2">
+<h2>Units, footnotes and sources</h2>
+<p>Where a sheet prints a unit per row — Table 10.7’s sugar in tonnes,
+soft drinks in thousands of litres — it comes through as a
+<code>unit</code> column. Footnote marks printed against labels
+(“Coffee1,2”) are removed from the label, and what the footnote said is
+kept in <code>knbs_metadata()</code>’s notes, along with the source the
+sheet credits:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">knbs_metadata</span>(<span class="fu">knbs_abstract_table</span>(<span class="st">&quot;7.6&quot;</span>))<span class="sc">$</span>notes</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="co">#&gt; ... &quot;Coffee and tea are auction prices; coffee refers to coffee beans</span></span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="co">#&gt;      and tea to black tea.&quot; &quot;Rice paddy prices for 2020 and 2021 are</span></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="co">#&gt;      revised.&quot; &quot;Source as printed: Marketing Boards, Millers and</span></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="co">#&gt;      Ginneries.&quot; ...</span></span></code></pre></div>
+</div>
+<div id="into-the-tidyverse" class="section level2">
+<h2>Into the tidyverse</h2>
+<p>Every result is a tibble, so dplyr verbs work directly — and they
+keep the provenance: filter it, rank it, transform it, and
+<code>knbs_metadata()</code> still answers on the result. Aggregations
+and reshapes return plain tibbles, because a derived table is your data,
+not the source’s.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="co"># The largest industries in 2024. Keeping one level of the table - the</span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co"># parts of &quot;All industries&quot; - leaves out the totals and the sub-industries</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co"># that would otherwise crowd the ranking.</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="fu">knbs_abstract_table</span>(<span class="st">&quot;2.2&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>  <span class="fu">filter</span>(period <span class="sc">==</span> <span class="dv">2024</span>, parent <span class="sc">==</span> <span class="st">&quot;All industries&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>  <span class="fu">slice_max</span>(value, <span class="at">n =</span> <span class="dv">5</span>) <span class="sc">|&gt;</span></span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a>  <span class="fu">select</span>(industry, value, status)</span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a></span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a><span class="co"># The breakdown of one industry</span></span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a><span class="fu">knbs_abstract_table</span>(<span class="st">&quot;2.2&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a>  <span class="fu">filter</span>(period <span class="sc">==</span> <span class="dv">2024</span>, parent <span class="sc">==</span> <span class="st">&quot;Agriculture, forestry and fishing&quot;</span>)</span>
+<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a></span>
+<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a><span class="co"># Recreate the printed-table look: industries by year, wide</span></span>
+<span id="cb7-17"><a href="#cb7-17" tabindex="-1"></a><span class="fu">knbs_abstract_table</span>(<span class="st">&quot;2.4&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb7-18"><a href="#cb7-18" tabindex="-1"></a>  <span class="fu">filter</span>(industry <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;Agriculture, forestry and fishing&quot;</span>,</span>
+<span id="cb7-19"><a href="#cb7-19" tabindex="-1"></a>                         <span class="st">&quot;Manufacturing&quot;</span>, <span class="st">&quot;GDP at market prices&quot;</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb7-20"><a href="#cb7-20" tabindex="-1"></a>  <span class="fu">select</span>(industry, period, value) <span class="sc">|&gt;</span></span>
+<span id="cb7-21"><a href="#cb7-21" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> period, <span class="at">values_from =</span> value)</span>
+<span id="cb7-22"><a href="#cb7-22" tabindex="-1"></a></span>
+<span id="cb7-23"><a href="#cb7-23" tabindex="-1"></a><span class="co"># Sectioned tables group naturally</span></span>
+<span id="cb7-24"><a href="#cb7-24" tabindex="-1"></a><span class="fu">knbs_abstract_table</span>(<span class="st">&quot;2.1&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb7-25"><a href="#cb7-25" tabindex="-1"></a>  <span class="fu">filter</span>(measure <span class="sc">==</span> <span class="st">&quot;Gross value added at basic prices&quot;</span>, period <span class="sc">==</span> <span class="dv">2024</span>) <span class="sc">|&gt;</span></span>
+<span id="cb7-26"><a href="#cb7-26" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(value))</span>
+<span id="cb7-27"><a href="#cb7-27" tabindex="-1"></a></span>
+<span id="cb7-28"><a href="#cb7-28" tabindex="-1"></a><span class="co"># And straight into ggplot2</span></span>
+<span id="cb7-29"><a href="#cb7-29" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb7-30"><a href="#cb7-30" tabindex="-1"></a><span class="fu">knbs_abstract_table</span>(<span class="st">&quot;2.5&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb7-31"><a href="#cb7-31" tabindex="-1"></a>  <span class="fu">filter</span>(industry <span class="sc">==</span> <span class="st">&quot;GDP at market prices&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb7-32"><a href="#cb7-32" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(period, value)) <span class="sc">+</span></span>
+<span id="cb7-33"><a href="#cb7-33" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
+<span id="cb7-34"><a href="#cb7-34" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Real GDP growth&quot;</span>, <span class="at">y =</span> <span class="st">&quot;per cent&quot;</span>)</span></code></pre></div>
+<p>To hand the data to something that dislikes subclasses, drop the
+wrapper with <code>tibble::as_tibble()</code>.</p>
+</div>
+<div id="provenance-travels" class="section level2">
+<h2>Provenance travels</h2>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>meta <span class="ot">&lt;-</span> <span class="fu">knbs_metadata</span>(gdp)</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>meta<span class="sc">$</span>source_url   <span class="co"># the workbook on knbs.or.ke</span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>meta<span class="sc">$</span>notes        <span class="co"># edition, sheet, workbook SHA-256, flag legend</span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="fu">knbs_cite</span>(gdp)</span></code></pre></div>
+<p>The workbook itself is downloaded once through the package’s verify
+layer — an HTML page arriving where a spreadsheet was expected is
+refused — cached locally, and hashed; the SHA-256 in the notes says
+exactly which file the numbers came from.</p>
+</div>
+<div id="what-this-is-not" class="section level2">
+<h2>What this is not</h2>
+<ul>
+<li><strong>Not a universal parser.</strong> Only curated tables
+extract; everything else in the workbooks remains available as verified
+downloads through <code>knbs_download_publication()</code>.</li>
+<li><strong>Not a modelling of the tables’ arithmetic.</strong>
+Aggregate rows (“GDP at market prices”, “Total”) are rows like any
+other, as printed; nothing is summed, derived or reconciled for you.
+<code>parent</code> records how the printed rows nest, and the check
+that parts add up guards the extraction — it never adjusts a
+figure.</li>
+<li><strong>Not immune to source revisions — by design.</strong> A
+changed workbook stops extraction until the registry is re-verified
+against it. That is the honest failure mode.</li>
+</ul>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

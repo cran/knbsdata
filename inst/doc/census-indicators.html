@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Indicators: census tables and consumer prices</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Indicators: census tables and consumer
+prices</h1>
+
+
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(knbsdata)</span></code></pre></div>
+<p><code>knbs_indicators()</code> lists what every verified indicator
+source serves, and <code>knbs_get_indicator()</code> returns one
+indicator as tidy observations. Three families exist today: tables from
+the <strong>2019 Population and Housing Census</strong> (CC BY 4.0), the
+<strong>monthly consumer price series</strong> from the KNBS CPI
+Explorer, the <strong>323 economic dataflows of the KNBS Data
+Portal</strong> — GDP, trade, balance of payments, county government
+finance and much else, in SDMX form — and the <strong>202 datasets
+republished by Kenya Open Data for Africa</strong>, which carry the one
+thing no first-party portal serves as data: Gross County Product.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">knbs_indicators</span>()                  <span class="co"># all families, source_id says which</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>cpi <span class="ot">&lt;-</span> <span class="fu">knbs_get_indicator</span>(<span class="st">&quot;CPI_ALL_ITEMS&quot;</span>, <span class="at">start =</span> <span class="st">&quot;2020-01&quot;</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>gdp <span class="ot">&lt;-</span> <span class="fu">knbs_get_indicator</span>(<span class="st">&quot;DF_NAT_GDPCP&quot;</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>pop <span class="ot">&lt;-</span> <span class="fu">knbs_get_indicator</span>(<span class="st">&quot;POPCEN0001&quot;</span>, <span class="at">geo_level =</span> <span class="st">&quot;county&quot;</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>gcp <span class="ot">&lt;-</span> <span class="fu">knbs_get_indicator</span>(<span class="st">&quot;jhbzkjc&quot;</span>) <span class="co"># Gross County Product, 2013-2020</span></span></code></pre></div>
+<div id="the-data-portal-sdmx" class="section level2">
+<h2>The Data Portal (SDMX)</h2>
+<p>Every dataflow keeps its SDMX id (<code>DF_NAT_GDPCP</code>,
+<code>DF_BOP_A</code>, <code>DF_CPI_R</code>…);
+<code>knbs_indicators(source = &quot;knbs_opendata&quot;)</code> lists all 323
+with their statistical domain as <code>topic</code>. Annual flows carry
+integer-year periods; monthly and quarterly ones carry first-of-period
+<code>Date</code>s, so <code>start</code> and <code>end</code> behave as
+everywhere else. Dimensions vary per flow; each becomes a pair of
+columns named by its SDMX id in lower case — <code>na_indic</code>
+holding the labels (“Accommodation and food service activities”) and
+<code>na_indic_code</code> the codes — and a Sex dimension becomes
+<code>sex</code>, lower-cased as in the census tables. The ids name the
+columns, not the portal’s labels, because the portal labels ten
+different dimensions just “Indicator”. Single-category dimensions
+(“Prices = Current prices”, “Unit = Kenya Shillings”) are facts about
+the whole dataflow and fold into <code>knbs_metadata()</code> notes
+instead of constant columns.</p>
+<p>Two cautions: the portal states <strong>no licence</strong>, and its
+geography codes are <strong>SDMX area codes, not census
+territories</strong> — <code>geo_level</code> is <code>NA</code> there,
+and they must never be joined against
+<code>knbs_geographies()</code>.</p>
+<p>Chunks that contact the services are shown but not run, so building
+this vignette never depends on them.</p>
+</div>
+<div id="open-data-for-africa-the-republisher" class="section level2">
+<h2>Open Data for Africa (the republisher)</h2>
+<p><code>knbs_indicators(source = &quot;opendataforafrica&quot;)</code> lists the
+202 datasets of <code>kenya.opendataforafrica.org</code>, the
+Knoema-operated portal on KNBS’s own portals page — 169 sourced from
+KNBS, the rest from the Central Bank of Kenya, ministries and agencies.
+Dataset ids are the portal’s own opaque slugs, so name search is the
+natural way in:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">knbs_indicators</span>(<span class="at">source =</span> <span class="st">&quot;opendataforafrica&quot;</span>, <span class="at">search =</span> <span class="st">&quot;county product&quot;</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>gcp <span class="ot">&lt;-</span> <span class="fu">knbs_get_indicator</span>(<span class="st">&quot;jhbzkjc&quot;</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>gcp[gcp<span class="sc">$</span>table_code <span class="sc">==</span> <span class="st">&quot;T3&quot;</span> <span class="sc">&amp;</span> gcp<span class="sc">$</span>period <span class="sc">==</span> <span class="dv">2020</span>, ]  <span class="co"># current-price GCP, 2020</span></span></code></pre></div>
+<p>Three behaviours to know:</p>
+<ul>
+<li><strong>Mixed frequencies.</strong> One dataset may hold annual,
+quarterly and monthly series side by side. Annual periods are integer
+years and sub-annual ones are <code>Date</code>s, which cannot share a
+column, so a mixed dataset refuses to pick silently — say
+<code>frequency = &quot;annual&quot;</code> (or <code>&quot;quarterly&quot;</code>,
+<code>&quot;monthly&quot;</code>) to choose.</li>
+<li><strong>Republished provenance.</strong>
+<code>knbs_metadata()</code> names the portal, the original producer,
+the dataset’s own licence label (most KNBS-sourced datasets state
+“Public Domain”) and the portal’s publication and update dates — the
+data vintage is visible, and can lag the producer’s newest PDFs.</li>
+<li><strong>Geography codes are the portal’s region codes</strong>
+(<code>KE</code>, <code>KE-110-NA</code>, …), <code>geo_level</code> is
+<code>NA</code>, and they must never be joined against
+<code>knbs_geographies()</code>.</li>
+</ul>
+</div>
+<div id="consumer-prices" class="section level2">
+<h2>Consumer prices</h2>
+<p>Three indicators, all monthly, all from one underlying series:</p>
+<table>
+<thead>
+<tr class="header">
+<th>id</th>
+<th>measure</th>
+<th>unit</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>CPI_ALL_ITEMS</code></td>
+<td>the index level</td>
+<td>index points</td>
+</tr>
+<tr class="even">
+<td><code>CPI_INFLATION_YOY</code></td>
+<td>year-on-year change</td>
+<td>percent</td>
+</tr>
+<tr class="odd">
+<td><code>CPI_INFLATION_MOM</code></td>
+<td>month-on-month change</td>
+<td>percent</td>
+</tr>
+</tbody>
+</table>
+<p><code>period</code> is a <code>Date</code> at the first of the month,
+with a <code>period_label</code> like <code>&quot;2026-06&quot;</code>.
+<code>start</code> and <code>end</code> take a year, a
+<code>&quot;YYYY-MM&quot;</code> month, or a date.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">knbs_get_indicator</span>(<span class="st">&quot;CPI_INFLATION_YOY&quot;</span>, <span class="at">start =</span> <span class="dv">2015</span>, <span class="at">end =</span> <span class="dv">2020</span>)</span></code></pre></div>
+<div id="cpi-geography-is-not-census-geography" class="section level3">
+<h3>CPI geography is not census geography</h3>
+<p>The default is the national series. The other level is
+<code>&quot;region&quot;</code> — the CPI collection strata: the Nairobi income
+bands, Nairobi Combined, and Rest of Urban.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">knbs_get_indicator</span>(<span class="st">&quot;CPI_ALL_ITEMS&quot;</span>, <span class="at">geo_level =</span> <span class="st">&quot;region&quot;</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="fu">knbs_get_indicator</span>(<span class="st">&quot;CPI_ALL_ITEMS&quot;</span>, <span class="at">geo_code =</span> <span class="fu">c</span>(<span class="st">&quot;national&quot;</span>, <span class="st">&quot;1&quot;</span>))</span></code></pre></div>
+<p>These region codes are the source’s own and mean nothing outside it.
+<strong>Do not join them against
+<code>knbs_geographies()</code></strong> — different coding system,
+different concept, and the package keeps them apart deliberately.</p>
+<p>Two more honesty notes, both from the source audit:</p>
+<ul>
+<li>The region list also names the former provinces (Central, Coast,
+Eastern, North Eastern, Nyanza, Rift Valley, Western), but <strong>they
+carry no data in any period</strong>. Asking for one returns zero rows,
+because that is the source’s answer.</li>
+<li>The portal states <strong>no licence</strong> and does not state the
+index base period. <code>knbs_metadata()</code> on any result says both,
+so the caveat travels with the data rather than living only in this
+vignette.</li>
+</ul>
+</div>
+<div id="retail-prices" class="section level3">
+<h3>Retail prices</h3>
+<p>The same portal publishes the monthly <strong>national average retail
+prices</strong> of the 22 commodities tracked for the CPI basket, in
+Kenya Shillings per stated unit:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">knbs_retail_prices</span>(<span class="at">commodity =</span> <span class="st">&quot;petrol&quot;</span>, <span class="at">start =</span> <span class="dv">2024</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="fu">knbs_retail_prices</span>(<span class="at">start =</span> <span class="st">&quot;2026-06&quot;</span>, <span class="at">end =</span> <span class="st">&quot;2026-06&quot;</span>)   <span class="co"># one month, all 22</span></span></code></pre></div>
+<p>One row per commodity per month: <code>commodity_code</code>
+(<code>CPI001</code>–<code>CPI022</code>), <code>commodity</code>,
+<code>unit</code>, <code>quantity</code>, <code>period</code>,
+<code>price</code>. National only — the source holds no regional retail
+prices — and the licence caveat above applies here too.</p>
+</div>
+</div>
+<div id="census-tables" class="section level2">
+<h2>Census tables</h2>
+<div id="what-the-census-source-is-and-is-not" class="section level3">
+<h3>What the census source is, and is not</h3>
+<p>Three properties worth knowing before you use it:</p>
+<ul>
+<li><strong>It is census data.</strong> Every table describes 2019.
+There are no time series here: <code>period</code> is 2019 throughout,
+and <code>frequency</code> is <code>NA</code> because a census table is
+not a recurring release. Consumer prices, GDP and other running
+indicators are <em>not</em> in this source (see the source-status
+vignette for where that work stands).</li>
+<li><strong>It is served over plain HTTP.</strong> The API host has no
+TLS listener, so traffic to it is unencrypted in transit. It carries
+only public census aggregates and no credentials; the registry records
+the exception explicitly.</li>
+<li><strong>It is first-party.</strong> The service is operated by KNBS
+(built with Istat, Italy’s national statistical institute) and linked
+from KNBS’s own portals page.</li>
+</ul>
+</div>
+<div id="finding-a-table" class="section level3">
+<h3>Finding a table</h3>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">knbs_indicators</span>()</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="fu">knbs_indicators</span>(<span class="at">topic =</span> <span class="st">&quot;Population&quot;</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="fu">knbs_indicators</span>(<span class="at">search =</span> <span class="st">&quot;marital&quot;</span>)</span></code></pre></div>
+<p>Thirty-two tables across four populated themes at the time of
+writing.</p>
+</div>
+<div id="getting-observations" class="section level3">
+<h3>Getting observations</h3>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>pop <span class="ot">&lt;-</span> <span class="fu">knbs_get_indicator</span>(<span class="st">&quot;POPCEN0001&quot;</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>pop</span></code></pre></div>
+<p>You can pass a name instead of an id; if several tables match you get
+an error listing the candidates rather than a silently chosen one.</p>
+<p>The result has one row per cell:</p>
+<ul>
+<li><strong>Core columns:</strong> <code>indicator_id</code>,
+<code>indicator_name</code>, <code>period</code>,
+<code>value</code>.</li>
+<li><strong>Geography</strong>, where the table has it:
+<code>geo_code</code>, <code>geo_name</code>, <code>geo_level</code>.
+Codes keep their leading zeros — <code>&quot;00&quot;</code> is Kenya, two digits
+are counties, four digits are sub-counties — and <code>geo_level</code>
+says which (<code>&quot;national&quot;</code>, <code>&quot;county&quot;</code>,
+<code>&quot;subcounty&quot;</code>).</li>
+<li><strong>Sex</strong>, where the table has it, using the source’s own
+categories (the 2019 census enumerated intersex as well as female and
+male).</li>
+<li><strong>Every other dimension</strong> becomes a pair of columns
+under a short, readable name: <code>marital_status</code> holding the
+source’s labels (“Never Married”, “Total”) and
+<code>marital_status_code</code> its codes (<code>&quot;1&quot;</code>,
+<code>&quot;T&quot;</code>). The census API names its dimensions by questionnaire
+variable (<code>p18_vs1</code>) and labels them in long prose, so the
+names are curated, one per dimension the 2019 tables carry:
+<code>age</code>, <code>religion</code>, <code>schooling_status</code>,
+<code>internet_use</code>, <code>household_head_sex</code> and so on. A
+dimension added later that has no curated name keeps its source id. The
+source’s own dimension labels are in
+<code>knbs_metadata(pop)$notes</code>.</li>
+<li><strong>Age</strong> mixes single years (<code>&quot;0&quot;</code> to
+<code>&quot;99&quot;</code>) with five-year groups (<code>&quot;0-4&quot;</code> …
+<code>&quot;95-99&quot;</code>, <code>&quot;100-120&quot;</code>) and a total, so summing
+every row counts people twice. <code>age_type</code> says which is which
+— <code>&quot;total&quot;</code>, <code>&quot;single_year&quot;</code>,
+<code>&quot;age_group&quot;</code> or <code>&quot;other&quot;</code> — and the groups are
+checked, on every read, to add up to the total and the single years to
+their group. <code>filter(age_type == &quot;age_group&quot;)</code> gives a
+population pyramid that adds up.</li>
+</ul>
+</div>
+<div id="filtering-geography" class="section level3">
+<h3>Filtering geography</h3>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>counties <span class="ot">&lt;-</span> <span class="fu">knbs_get_indicator</span>(<span class="st">&quot;POPCEN0001&quot;</span>, <span class="at">geo_level =</span> <span class="st">&quot;county&quot;</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>nairobi  <span class="ot">&lt;-</span> <span class="fu">knbs_get_indicator</span>(<span class="st">&quot;POPCEN0001&quot;</span>, <span class="at">geo_code =</span> <span class="st">&quot;47&quot;</span>)</span></code></pre></div>
+<p>Filters are applied after retrieval — the API serves whole tables —
+so the first call and the second cost the same request. Tables are
+cached for seven days by default.</p>
+</div>
+<div id="a-worked-example" class="section level3">
+<h3>A worked example</h3>
+<p>County population aged 12+, both sexes, all marital statuses:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>pop <span class="ot">&lt;-</span> <span class="fu">knbs_get_indicator</span>(<span class="st">&quot;POPCEN0001&quot;</span>, <span class="at">geo_level =</span> <span class="st">&quot;county&quot;</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>totals <span class="ot">&lt;-</span> pop[pop<span class="sc">$</span>sex <span class="sc">==</span> <span class="st">&quot;total&quot;</span> <span class="sc">&amp;</span> pop<span class="sc">$</span>marital_status <span class="sc">==</span> <span class="st">&quot;Total&quot;</span>,</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>              <span class="fu">c</span>(<span class="st">&quot;geo_code&quot;</span>, <span class="st">&quot;geo_name&quot;</span>, <span class="st">&quot;value&quot;</span>)]</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>totals[<span class="fu">order</span>(<span class="sc">-</span>totals<span class="sc">$</span>value), ]</span></code></pre></div>
+<p>Because <code>geo_code</code> is character with leading zeros intact,
+these codes join cleanly against any other dataset keyed the same
+way.</p>
+</div>
+<div id="provenance-and-citation" class="section level3">
+<h3>Provenance and citation</h3>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="fu">knbs_metadata</span>(pop)</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="fu">knbs_cite</span>(pop)</span></code></pre></div>
+<p>The metadata carry the licence statement, the release date
+(<code>2019-12-31</code>), the source statement (“KNBS Population Census
+2019”) and the dimension list; the citation is built from them.</p>
+</div>
+<div id="honesty-notes" class="section level3">
+<h3>Honesty notes</h3>
+<ul>
+<li><code>unit</code> is <code>NA</code> in the catalogue: the source
+does not state units, and counts-versus-proportions is knowable only
+from each table’s name. The package does not guess.</li>
+<li>An unknown table id is reported as <em>not found</em>. (The API
+itself answers those requests with HTTP 200 and a body reading
+<code>errore</code>; the package translates.)</li>
+<li>The service checks the <em>shape</em> of everything it parses. If
+the API changes, you get <code>knbs_error_schema_changed</code>, not a
+plausible-looking wrong table.</li>
+</ul>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

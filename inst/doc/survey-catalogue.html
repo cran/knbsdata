@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Working with the survey catalogue</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Working with the survey catalogue</h1>
+
+
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(knbsdata)</span></code></pre></div>
+<p>This vignette covers finding a survey, reading its documentation and
+understanding what you are and are not allowed to do with it.</p>
+<p>Every code chunk that contacts the archive is shown but not run, so
+that building this vignette never depends on a live service.</p>
+<div id="what-is-supported" class="section level2">
+<h2>What is supported</h2>
+<p><code>knbs_sources()</code> reports what the package knows about each
+source and how far it has been verified. Nothing here makes a
+request:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">knbs_sources</span>(<span class="at">operation =</span> <span class="st">&quot;search_surveys&quot;</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="co">#&gt; # A tibble: 2 × 8</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co">#&gt;   source_id   source_name        source_type operations stability authentication</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;       &lt;chr&gt;              &lt;chr&gt;       &lt;list&gt;     &lt;chr&gt;     &lt;chr&gt;         </span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="co">#&gt; 1 kenada      Kenya National Da… survey_cat… &lt;chr [4]&gt;  experime… none          </span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="co">#&gt; 2 fake_source Offline test sour… fake        &lt;chr [6]&gt;  discovery none          </span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="co">#&gt; # ℹ 2 more variables: last_verified &lt;date&gt;, base_url &lt;chr&gt;</span></span></code></pre></div>
+<p>The survey catalogue is the Kenya National Data Archive, which
+exposes a JSON API. It is registered as <code>experimental</code>: the
+endpoints are verified and covered by tests, but the archive does not
+document the API, so it could change without notice. If it does, the
+package raises a <code>knbs_error_schema_changed</code> rather than
+returning something plausible.</p>
+</div>
+<div id="finding-a-survey" class="section level2">
+<h2>Finding a survey</h2>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>studies <span class="ot">&lt;-</span> <span class="fu">knbs_search_surveys</span>(<span class="st">&quot;household budget&quot;</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>studies</span></code></pre></div>
+<p>You can filter by reference year, by producer and by access type:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">knbs_search_surveys</span>(<span class="at">year =</span> <span class="fu">c</span>(<span class="dv">2015</span>, <span class="dv">2020</span>))</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="fu">knbs_search_surveys</span>(<span class="at">access =</span> <span class="st">&quot;public_use&quot;</span>, <span class="at">limit =</span> <span class="dv">10</span>)</span></code></pre></div>
+<p>Three columns come back as <code>NA</code> from a search:
+<code>acronym</code>, <code>geographic_coverage</code> and
+<code>unit_of_analysis</code>. They live in the study record rather than
+the catalogue index, and filling them in would mean one extra request
+per row. <code>knbs_survey_metadata()</code> retrieves them.</p>
+</div>
+<div id="reading-a-studys-documentation" class="section level2">
+<h2>Reading a study’s documentation</h2>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>meta <span class="ot">&lt;-</span> <span class="fu">knbs_survey_metadata</span>(<span class="st">&quot;KEN-KNBS-KIHBS-2015-2016-v01&quot;</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>meta</span></code></pre></div>
+<p>The printed record shows the title, reference period, producer,
+geographic coverage, unit of analysis and access type. The full
+descriptive sections are in <code>meta$sections</code>;
+<code>include</code> narrows them:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">knbs_survey_metadata</span>(<span class="st">&quot;KEN-KNBS-KIHBS-2015-2016-v01&quot;</span>, <span class="at">include =</span> <span class="fu">c</span>(<span class="st">&quot;scope&quot;</span>, <span class="st">&quot;access&quot;</span>))</span></code></pre></div>
+<p>These records are DDI documents, in which sampling, data collection
+and processing all live in a single <code>method</code> section, so
+asking for any one of those returns that section.</p>
+<p>You do not have to know the exact identifier. Give it something
+recognisable and it will search the catalogue; if more than one study
+matches you get an error listing the candidates rather than a silently
+chosen “best” match.</p>
+</div>
+<div id="searching-variables" class="section level2">
+<h2>Searching variables</h2>
+<p>Variable metadata are available without downloading any
+microdata:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">knbs_variables</span>(<span class="st">&quot;KEN-KNBS-KIHBS-2015-2016-v01&quot;</span>, <span class="at">search =</span> <span class="st">&quot;expenditure&quot;</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="fu">knbs_variables</span>(<span class="st">&quot;KEN-KNBS-KIHBS-2015-2016-v01&quot;</span>, <span class="at">file =</span> <span class="st">&quot;HH_Information&quot;</span>)</span></code></pre></div>
+<p><code>search</code> matches variable names and labels, and matches
+nothing else. If a concept you expect is missing, it is worth listing
+all the variables and looking at the labels the study actually uses
+before concluding the search is broken.</p>
+<p>Question text, universe, concept and value labels each cost one
+request per variable, so they are empty unless you ask:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">knbs_variables</span>(</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>  <span class="st">&quot;KEN-KNBS-KIHBS-2015-2016-v01&quot;</span>,</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>  <span class="at">search =</span> <span class="st">&quot;county&quot;</span>,</span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>  <span class="at">details =</span> <span class="cn">TRUE</span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>)</span></code></pre></div>
+<p>That is capped at 100 variables. Narrow the selection first rather
+than raising the cap.</p>
+<p>Some studies are catalogued with no variable documentation at all —
+including, at the time of writing, the most recent one. That returns
+zero rows, which is an answer rather than a failure.</p>
+</div>
+<div id="files-and-what-you-may-do-with-them" class="section level2">
+<h2>Files, and what you may do with them</h2>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">knbs_survey_files</span>(<span class="st">&quot;KEN-KNBS-KIHBS-2015-2016-v01&quot;</span>)</span></code></pre></div>
+<p>Two columns matter most:</p>
+<ul>
+<li><code>access_type</code> describes the archive’s terms.
+<code>public_use</code> means public-use files exist. It does
+<strong>not</strong> mean they can be downloaded without an
+account.</li>
+<li><code>downloadable</code> describes what this package will do. At
+present it is <code>FALSE</code> for every file from every supported
+source.</li>
+</ul>
+<p>This lists <strong>data files only</strong>. Questionnaires, reports
+and technical documents are not covered: the archive publishes no
+machine-readable listing of them, so retrieving them would mean parsing
+a web page, which this package does not do. Use the
+<code>catalogue_url</code> column from
+<code>knbs_search_surveys()</code> to open the study on the archive’s
+own site, where the documentation is linked.</p>
+</div>
+<div id="downloading-microdata" class="section level2">
+<h2>Downloading microdata</h2>
+<p>You cannot do this through <code>knbsdata</code>, and that is
+deliberate:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">knbs_download_microdata</span>(<span class="st">&quot;KEN-KNBS-KIHBS-2015-2016-v01&quot;</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="co">#&gt; Error: Microdata from &quot;kenada&quot; cannot be downloaded programmatically.</span></span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="co">#&gt; x Every download requires an account with the archive.</span></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="co">#&gt; i Register and request access at &lt;https://statistics.knbs.or.ke/nada/index.php/home&gt;.</span></span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="co">#&gt; i knbsdata does not automate sign-in, licence acceptance or approval workflows.</span></span></code></pre></div>
+<p>The archive puts every download behind a login. The package does not
+automate sign-in, licence acceptance or approval workflows, so the
+function exists purely to fail clearly and point you at the official
+process. Complete that process, download the files yourself, and read
+them with <code>knbs_read_microdata()</code>, which reads Stata, SPSS
+and Excel files and the data inside a <code>.zip</code>, keeping value
+labels.</p>
+<p>This matters for a subtler reason too. The gate is signalled by an
+HTTP <code>Refresh</code> header rather than a redirect status, so a
+client that only checks the status code sees <code>200 OK</code> and an
+empty body — and could report “no data” where the honest answer is “you
+need an account”. The package treats that as an authentication
+error.</p>
+</div>
+<div id="open-microdata-the-finaccess-surveys" class="section level2">
+<h2>Open microdata: the FinAccess surveys</h2>
+<p>Some surveys’ microdata are published for anyone to download. The
+FinAccess household survey, Kenya’s survey of financial inclusion by the
+Central Bank of Kenya, KNBS and FSD Kenya, is one: six rounds from 2006
+to 2024, plus two waves of the FinAccess MSE Tracker Survey of micro and
+small enterprises. The archive catalogues these studies (and a 2019
+round the portal has no files for), but lists no data files or variables
+for any of them, and gates its downloads behind an account as it does
+everywhere. The FinAccess portal publishes the files themselves, so they
+have their own functions.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="co"># The catalogue ships with the package: listing it contacts nothing</span></span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="fu">knbs_finaccess_files</span>(<span class="at">content =</span> <span class="st">&quot;data&quot;</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a><span class="co"># Download and read the 2024 household survey (Stata, 160 MB). Name any folder</span></span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a><span class="co"># you like; tempdir() keeps it for this session only.</span></span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a>dir <span class="ot">&lt;-</span> <span class="fu">file.path</span>(<span class="fu">tempdir</span>(), <span class="st">&quot;finaccess&quot;</span>)</span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a>fa <span class="ot">&lt;-</span> <span class="fu">knbs_read_microdata</span>(<span class="fu">knbs_download_finaccess</span>(<span class="st">&quot;hh2024-stata&quot;</span>, dir))</span>
+<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a><span class="fu">knbs_cite</span>(fa)</span></code></pre></div>
+<p>The portal is a web page linking files on Google Drive, so the
+package keeps its own catalogue of them — names, sizes and SHA-256
+checksums, every file opened and checked by hand — and holds each
+download to it: a file that has changed since is refused before anything
+large moves, and a transfer that arrives damaged is not kept. Running
+the same line again finds the file already downloaded, confirms its
+checksum and reads it without a request.</p>
+<p>Each file gets a sidecar recording where it came from and the
+producers’ terms. The portal states no licence; FSD Kenya’s terms for
+the 2013 survey restrict the data to research and forbid redistribution
+without written agreement, so assume nothing wider.</p>
+<p><code>knbs_read_microdata()</code> keeps Stata and SPSS value labels
+as <code>haven::labelled()</code> columns, and each variable’s question
+text in its <code>&quot;label&quot;</code> attribute. The 2024 file has 20,871
+respondents and 3,816 variables, so <code>col_select</code> is worth
+knowing:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>fa <span class="ot">&lt;-</span> <span class="fu">knbs_read_microdata</span>(<span class="fu">file.path</span>(dir, <span class="st">&quot;2024_Finaccess_Publicdata.dta&quot;</span>),</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>                          <span class="at">col_select =</span> <span class="fu">c</span>(<span class="st">&quot;county&quot;</span>, <span class="st">&quot;A13&quot;</span>, <span class="st">&quot;A18&quot;</span>))</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="fu">attr</span>(fa<span class="sc">$</span>A18, <span class="st">&quot;label&quot;</span>)                  <span class="co"># &quot;A18. AGE OF RESPONDENT&quot;</span></span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="fu">table</span>(haven<span class="sc">::</span><span class="fu">as_factor</span>(fa<span class="sc">$</span>A13))        <span class="co"># value labels as factor levels</span></span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a></span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a><span class="co"># Respondents&#39; counties as census codes, ready to join census tables</span></span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a>fa<span class="sc">$</span>geo_code <span class="ot">&lt;-</span> <span class="fu">knbs_county_code</span>(haven<span class="sc">::</span><span class="fu">as_factor</span>(fa<span class="sc">$</span>county))</span></code></pre></div>
+</div>
+<div id="handling-errors" class="section level2">
+<h2>Handling errors</h2>
+<p>Every failure carries a specific condition class, so you can react to
+the particular problem rather than matching on message text:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">tryCatch</span>(</span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a>  <span class="fu">knbs_survey_metadata</span>(<span class="st">&quot;Kenya&quot;</span>),</span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a>  <span class="at">knbs_error_ambiguous_resource =</span> <span class="cf">function</span>(cnd) {</span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a>    <span class="fu">message</span>(<span class="st">&quot;Several studies match; using the first.&quot;</span>)</span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a>    <span class="fu">knbs_survey_metadata</span>(cnd<span class="sc">$</span>matches[[<span class="dv">1</span>]])</span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a>  },</span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a>  <span class="at">knbs_error_resource_not_found =</span> <span class="cf">function</span>(cnd) <span class="cn">NULL</span>,</span>
+<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a>  <span class="at">knbs_error_source_unavailable =</span> <span class="cf">function</span>(cnd) <span class="cn">NULL</span></span>
+<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a>)</span></code></pre></div>
+<p>The classes you are most likely to want are
+<code>knbs_error_ambiguous_resource</code> (which carries the candidates
+in <code>$matches</code>), <code>knbs_error_resource_not_found</code>,
+<code>knbs_error_authentication_required</code> (which carries
+<code>$access_url</code>), <code>knbs_error_source_unavailable</code>
+and <code>knbs_error_schema_changed</code>. All of them inherit from
+<code>knbs_error</code>, so you can catch that instead to handle any
+package failure at once.</p>
+<p>One practical note: catch <code>error</code>, not
+<code>condition</code>. httr2 signals a benign
+<code>httr2_perform</code> condition on every request, so a
+<code>tryCatch(..., condition = )</code> handler will catch that first
+and never see your error.</p>
+</div>
+<div id="citing-what-you-used" class="section level2">
+<h2>Citing what you used</h2>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="fu">knbs_cite</span>(meta)</span></code></pre></div>
+<p>Where the archive states a required citation, that text is used and
+the package adds the retrieval date and its own version.
+<code>knbs_metadata()</code> shows the full provenance record behind any
+object.</p>
+</div>
+<div id="caching" class="section level2">
+<h2>Caching</h2>
+<p>Catalogue responses are cached for 24 hours by default:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="fu">knbs_cache_info</span>()</span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a><span class="fu">knbs_search_surveys</span>(<span class="st">&quot;household budget&quot;</span>, <span class="at">refresh =</span> <span class="cn">TRUE</span>)  <span class="co"># bypass the cache</span></span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a><span class="fu">knbs_cache_clear</span>()</span></code></pre></div>
+<p>Cache entries are checksummed and keyed partly on the package’s
+parser version, so upgrading the package invalidates anything a new
+parser would read differently.</p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

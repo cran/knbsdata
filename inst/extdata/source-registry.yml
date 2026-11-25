@@ -1,0 +1,326 @@
+# knbsdata source registry
+#
+# One entry per supported or candidate source. Nothing in this file is a
+# verified endpoint yet: every base_url is the placeholder
+# "PLACEHOLDER_TO_VERIFY" and every source is at stability "discovery" until the
+# Phase 1 source-discovery audit records a checked URL, the terms of use and the
+# access conditions. The registry validator refuses to let a source with an
+# unverified base_url claim a higher stability level.
+#
+# Never store credentials, tokens or cookies in this file.
+
+schema_version: 1
+
+sources:
+  - source_id: kenada
+    source_name: Kenya National Data Archive (KeNADA)
+    owner: Kenya National Bureau of Statistics
+    source_type: survey_catalogue
+    base_url: https://statistics.knbs.or.ke/nada/index.php/api
+    landing_page: https://statistics.knbs.or.ke/nada/index.php/home
+    adapter: nada
+    # download_public_files is deliberately NOT declared: microdata download is
+    # gated behind a login (audit finding F-03). The package lists files and
+    # their access conditions but must never fetch them.
+    operations:
+      - search_surveys
+      - survey_metadata
+      - variables
+      - files
+    authentication: none
+    formats:
+      - json
+    stability: experimental
+    last_verified: 2026-08-03
+    terms_url: null
+    notes:
+      - NADA JSON API, verified 2026-08-03; tier 2 (public but undocumented by KNBS).
+      - Detail endpoints key on the DDI idno, not the numeric id; resolve id -> idno first.
+      - A Refresh header pointing at /auth/login means authentication is required,
+        not an empty successful response.
+      - form_model "public" means public-use files, not downloadable without an account.
+      - Variable metadata is absent for some studies; an empty variable set is valid.
+      - Access type must be recorded per study, not per catalogue.
+
+  - source_id: finaccess
+    source_name: FinAccess Household and MSE Tracker Surveys (open microdata)
+    owner: Central Bank of Kenya, Kenya National Bureau of Statistics and FSD Kenya
+    source_type: static_files
+    base_url: https://finaccess.knbs.or.ke
+    landing_page: https://finaccess.knbs.or.ke/reports-and-datasets
+    adapter: finaccess
+    # The portal is a web page linking Google Drive files; nothing lists them
+    # in a machine-readable form. They are catalogued by hand in
+    # finaccess-registry.yml, and every download is held to that record.
+    operations:
+      - download_public_files
+    authentication: none
+    formats:
+      - dta
+      - sav
+      - xlsx
+      - zip
+      - pdf
+    stability: experimental
+    last_verified: 2026-10-08
+    terms_url: null
+    notes:
+      - Google Sites page linking Google Drive files, verified 2026-10-08
+        (audit F-40); tier 2.
+      - Anonymised, weighted microdata from the 2006, 2009, 2013, 2016, 2021
+        and 2024 household surveys and two waves of the MSE Tracker Survey,
+        open without an account.
+      - The portal states no licence. FSD Kenya's terms for the 2013 survey
+        on Harvard Dataverse forbid redistribution without written
+        agreement; reuse terms must not be assumed, and no file is ever
+        bundled with the package.
+      - Files are fetched from drive.usercontent.google.com with confirm=t.
+        A file over Drive's virus-scanning size limit otherwise answers with
+        a notice that it could not be scanned, whose download button
+        requests that same URL. The notice is not an access gate; the files
+        are held to their catalogued name, size and SHA-256 instead.
+      - Several portal labels are wrong - the MSE Wave II formats are
+        swapped, the Wave I Stata link serves the SPSS file, and the 2006 and
+        2009 "Questionnaire" archives hold the data too. The catalogue
+        records what each link serves.
+      - The 2013 survey's Stata copy on Harvard Dataverse sits behind a
+        guestbook form. It is listed, never fetched; the SPSS copy is open.
+
+  - source_id: knbs_publications
+    source_name: KNBS Publications (website media library)
+    owner: Kenya National Bureau of Statistics
+    source_type: publication_catalogue
+    base_url: https://www.knbs.or.ke/wp-json/wp/v2
+    landing_page: https://www.knbs.or.ke/
+    adapter: wordpress
+    operations:
+      - search_publications
+      - publication_metadata
+      - download_publication
+    authentication: none
+    formats:
+      - json
+      - pdf
+      - xlsx
+    stability: experimental
+    last_verified: 2026-08-08
+    terms_url: null
+    notes:
+      - WordPress core REST API over the media library, verified 2026-08-08; tier 2.
+      - The Download Monitor catalogue also exists but its REST routes are gated
+        (403); the media library carries the same files ungated (audit F-12).
+      - The date field is the upload date, not the publication's reference
+        period (audit F-13). The reference year must come from the title.
+      - The library also holds speeches and forms; media_type=application
+        excludes images, and further narrowing is the caller's query (F-14).
+      - Files are direct wp-content/uploads URLs; download through the
+        verify-and-checksum layer, preserving the official filename.
+
+  - source_id: knbs_indicators
+    source_name: KNBS Census Data API (DataBrowser)
+    owner: Kenya National Bureau of Statistics
+    source_type: indicator_portal
+    base_url: http://api1.knbs.or.ke
+    landing_page: http://data.knbs.or.ke/
+    # The API host has no TLS listener (audit F-16). http_only acknowledges the
+    # exception explicitly; traffic carries public census aggregates only.
+    http_only: true
+    adapter: indicators
+    operations:
+      - list_indicators
+      - get_indicator
+      - indicator_metadata
+      # The census tables' Territory dimension doubles as the geography
+      # reference: 393 coded, named units at national, county and sub-county
+      # level, vintage 2019 (audit F-20).
+      - geographies
+    authentication: none
+    formats:
+      - json
+      - csv
+    stability: experimental
+    last_verified: 2026-08-08
+    terms_url: null
+    notes:
+      - 2019 census tables as JSON-stat 2.0, verified 2026-08-08; tier 2.
+      - Portal states "All data are released under CC-BY 4.0 license".
+      - An unknown dataset id answers 200 with the body "errore" (audit F-17);
+        that is a missing resource, not a document.
+      - The JSON Content-Type is misdeclared as text/html (F-18); verify shape,
+        not type.
+      - getDatasetList requires lang but ignores its value (F-19); always en.
+      - Territory codes keep leading zeros and cover national, county and
+        sub-county levels (F-20).
+
+  - source_id: knbs_cpi
+    source_name: KNBS CPI Explorer
+    owner: Kenya National Bureau of Statistics
+    source_type: indicator_portal
+    base_url: https://cpiexplorer.knbs.or.ke/api/v1
+    landing_page: https://cpiexplorer.knbs.or.ke/
+    adapter: cpiexplorer
+    operations:
+      - list_indicators
+      - get_indicator
+      - indicator_metadata
+      - retail_prices
+    authentication: none
+    formats:
+      - json
+    stability: experimental
+    last_verified: 2026-08-08
+    terms_url: null
+    notes:
+      - Monthly CPI and inflation, 2009 to present, traced 2026-08-08 (audit 1c).
+      - Retail prices are a paginated national history (audit F-27); no
+        regional retail data exists, so no region argument is offered.
+      - The portal states no licence; reuse terms must not be assumed (unlike
+        the census DataBrowser's CC BY 4.0).
+      - An unknown region id silently falls back to the national series (F-24);
+        requested regions are validated against /explorer/regions/ and returned
+        series are matched by their metadata.region field.
+      - Six listed regions (the former provinces) carry no data in any period
+        (F-26); an empty answer for them is the source's answer.
+      - Every series arrives with id "overall"; only metadata.region
+        distinguishes regions.
+      - CPI regions are collection strata, not census territories; their codes
+        must never be joined against knbs_geographies().
+
+  - source_id: knbs_opendata
+    source_name: KNBS Data Portal (SDMX hub)
+    owner: Kenya National Bureau of Statistics
+    source_type: indicator_portal
+    base_url: https://opendata.knbs.or.ke/beta/databrowserhub/api/Core/nodes/1
+    landing_page: https://opendata.knbs.or.ke/
+    adapter: sdmxhub
+    operations:
+      - list_indicators
+      - get_indicator
+      - indicator_metadata
+    authentication: none
+    formats:
+      - json
+    stability: experimental
+    last_verified: 2026-08-08
+    terms_url: null
+    notes:
+      - Istat DataBrowser hub over an SDMX service, traced 2026-08-08 (audit
+        F-28); 323 dataflows across five statistical domains.
+      - Data queries are POST requests with a JSON criteria body; an empty
+        array returns the whole dataflow. Responses are JSON-stat with sparse
+        values, and carry a role field naming the time and geography
+        dimensions.
+      - No licence statement found on the portal; reuse terms must not be
+        assumed.
+      - Geography codes here (REF_AREA) are SDMX area codes, not census
+        territory codes; they must never be joined against knbs_geographies().
+
+  - source_id: opendataforafrica
+    source_name: Kenya Open Data for Africa (Knoema)
+    owner: Kenya National Bureau of Statistics and partner agencies, via the Knoema-operated portal
+    source_type: indicator_portal
+    base_url: https://kenya.opendataforafrica.org/api
+    landing_page: https://kenya.opendataforafrica.org/
+    adapter: knoema
+    operations:
+      - list_indicators
+      - get_indicator
+      - indicator_metadata
+    authentication: none
+    formats:
+      - json
+    stability: experimental
+    last_verified: 2026-08-11
+    terms_url: null
+    notes:
+      - Knoema data platform republishing 202 Kenyan datasets, traced 2026-08-11
+        (audit F-30); 169 are KNBS-sourced under a "Public Domain" licence
+        label, the rest come from the Central Bank of Kenya, ministries and
+        agencies. Licence labels vary by dataset and are carried verbatim.
+      - A third-party republisher, listed on KNBS's own portals page. It fills
+        gaps no first-party portal serves as data (Gross County Product);
+        first-party portals stay preferred wherever they carry the same data,
+        and provenance names the portal and points at the original producer.
+      - robots.txt disallows /api/1.0/sdmx; the package must never use the
+        SDMX export route here. The JSON API is permitted.
+      - An unknown dataset id answers 200 with a bare explanatory string, not
+        a 404 (audit F-31); that is a missing resource, not data.
+      - The dataset listing's structural fields are unreliable - it says
+        hasGeoDimension false for datasets whose own metadata says true
+        (audit F-32). Structure is read only from per-dataset metadata.
+      - Datasets may mix frequencies in one id - annual, quarterly and monthly
+        series side by side (audit F-33). A mixed dataset requires an explicit
+        frequency choice; nothing is picked silently.
+      - Geography codes are the portal's own region codes, not census
+        territories; they must never be joined against knbs_geographies().
+      - The portal was Cloudflare-gated when first probed (F-29), and its
+        edge still intermittently challenges libcurl's default HTTP
+        negotiation (F-34). The adapter pins plain HTTP/1.1 under the
+        package's own transparent User-Agent - ordinary client
+        configuration, not a disguise. A challenge that returns anyway is
+        an access gate, never something to solve or retry through.
+
+  - source_id: dhs_program
+    source_name: The DHS Program Indicator Data API (Kenya DHS and MIS)
+    owner: The DHS Program, ICF
+    source_type: indicator_portal
+    base_url: https://api.dhsprogram.com/rest/dhs
+    landing_page: https://api.dhsprogram.com/
+    adapter: dhs
+    operations:
+      - list_indicators
+      - get_indicator
+      - indicator_metadata
+    authentication: none
+    formats:
+      - json
+    stability: experimental
+    last_verified: 2026-10-08
+    terms_url: https://api.dhsprogram.com/#/terms.cfm
+    notes:
+      - Aggregate indicators from Kenya's nine DHS Program surveys - the Kenya
+        Demographic and Health Surveys 1989-2022, implemented by KNBS and
+        earlier agencies, and the 2015 and 2020 Malaria Indicator Surveys -
+        traced 2026-10-08 (audit F-42); tier 2. 4,142 indicators, with
+        values for the 47 counties from 2014.
+      - The KDHS portal (kdhsportal.knbs.or.ke) is a Shiny app with no data
+        API, and answered with an error (audit F-41); this is the published
+        route to the same indicators.
+      - Terms ask only that the API be cited, in a stated form; no licence
+        is stated. An API key is optional and only raises the page size.
+      - robots.txt disallows /rest/dhs/ to every user agent, while the
+        API's documentation offers it to "all users" for building
+        applications. The rule is read as addressed to crawlers. The
+        adapter requests only what a user asks for, one indicator at a
+        time, under the package's own User-Agent, throttled and cached; it
+        never walks the API.
+      - An unknown indicator id answers 200 with zero records, not a 404.
+        The indicator listing repeats 27 ids under two different labels.
+      - County rows are matched to 2019 census county codes; the former
+        provinces and malaria zones carry no code. Never join those
+        against knbs_geographies().
+
+  # Internal fixture source used by tests (plan section 28, step 4). It never
+  # touches the network and is not intended for users.
+  - source_id: fake_source
+    source_name: Offline test source
+    owner: knbsdata test fixtures
+    source_type: fake
+    base_url: PLACEHOLDER_TO_VERIFY
+    adapter: fake
+    operations:
+      - search_surveys
+      - survey_metadata
+      - variables
+      - files
+      - list_indicators
+      - get_indicator
+    authentication: none
+    formats:
+      - json
+    stability: discovery
+    last_verified: null
+    terms_url: null
+    notes:
+      - Serves stored fixtures so that public functions can be tested offline.
+      - Fixtures live in inst/extdata/fake/; no network request is ever made.
